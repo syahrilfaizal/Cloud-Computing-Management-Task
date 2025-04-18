@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: flask_container
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db  # Flask hanya akan mulai setelah db siap
+    environment:
+      - DB_HOST=db
+      - DB_NAME=task_db
+      - DB_USER=username
+      - DB_PASSWORD=password
+
+  db:
+    image: postgres:12-alpine
+    container_name: postgres_container
+    environment:
+      - POSTGRES_DB=task_db
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+
+    volumes:
+    - db_data:/var/lib/postgresql/data
+    - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql  # Mount schema.sql
+
+volumes:
+  db_data:
