@@ -14,5 +14,5 @@ def get_db_connection():
             )
         except psycopg2.OperationalError as e:
             print("Database connection failed, retrying in 5 seconds...")
-            time.sleep(5)  # Retry after 5 seconds if connection fails
+            time.sleep(5) 
     return conn
