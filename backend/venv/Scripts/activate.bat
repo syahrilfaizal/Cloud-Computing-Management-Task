@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\tubes cc\Cloud-Computing-Management-Task\backend\venv
+set VIRTUAL_ENV=C:\Users\ASUS\Documents\College\Semester 6 one more step\CC\Cloud-Computing-Management-Task\backend\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

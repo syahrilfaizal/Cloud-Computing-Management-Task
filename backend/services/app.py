@@ -1,8 +1,10 @@
 from flask import Flask
 from .users import user_bp
 from .tasks import task_bp
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Register blueprints
 app.register_blueprint(user_bp, url_prefix='/api/users')
