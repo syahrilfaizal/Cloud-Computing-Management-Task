@@ -22,7 +22,7 @@ COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
 # Set the FLASK_APP environment variable for Flask to recognize app.py
-ENV FLASK_APP=/app/app.py
+ENV FLASK_APP=/services/app.py
 
 # Wait for PostgreSQL to be ready, then start the Flask app
-CMD sleep 10 && flask run --host=0.0.0.0 --port=5000
+CMD ["sh", "-c", "cd services && gunicorn app:app --bind 0.0.0.0:$PORT"]
