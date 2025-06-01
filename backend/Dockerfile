@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Salin semua file dari backend ke dalam container
-COPY backend/ /app/
+COPY ../backend/ /app/
 
 # Salin requirements.txt dan install dependencies
 COPY backend/requirements.txt /app/requirements.txt
