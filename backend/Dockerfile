@@ -14,6 +14,9 @@ WORKDIR /app
 COPY services/requirements.txt .
 RUN pip install -r requirements.txt
 
+# Run the migration script before starting the app
+CMD python migrate_db.py && flask run --host=0.0.0.0 --port=5432
+
 # Copy the rest of the backend files (app.py, models.py, etc.)
 COPY services /app
 
@@ -21,11 +24,10 @@ COPY services /app
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
-# Run the migration script before starting the app
-CMD python migrate_db.py && flask run --host=0.0.0.0 --port=5000
+CMD /wait-for-it.sh $DATABASE_HOST:$DATABASE_PORT -- flask run --host=0.0.0.0 --port=5432
 
 # Set the FLASK_APP environment variable for Flask to recognize app.py
 ENV FLASK_APP=/app/app.py
 
 # Wait for PostgreSQL to be ready, then start the Flask app
-CMD sleep 10 && flask run --host=0.0.0.0 --port=5000
+CMD sleep 10 && flask run --host=0.0.0.0 --port=5432
