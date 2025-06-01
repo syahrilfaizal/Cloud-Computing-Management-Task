@@ -10,21 +10,19 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy the requirements and install them
-COPY services/requirements.txt .
-RUN pip install -r requirements.txt
+# Salin semua file dari backend ke dalam container
+COPY backend/ /app/
 
-# Copy the rest of the backend files (app.py, models.py, etc.)
-COPY services /app
+# Salin requirements.txt dan install dependencies
+COPY backend/requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
-# Copy the db/schema.sql to the container
-COPY db/schema.sql /app/db/schema.sql
-
-# Add wait-for-it.sh to the image and make it executable
-COPY wait-for-it.sh /wait-for-it.sh
+# Copy wait-for-it.sh and make it executable
+COPY backend/wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
 
 # Set the FLASK_APP environment variable for Flask to recognize app.py
 ENV FLASK_APP=/app/app.py
 
-CMD /wait-for-it.sh postgres.railway.internal 5432 -- python migrate_db.py && flask run --host=0.0.0.0 --port=5000
+# Run the migration script and start the Flask app
+CMD /wait-for-it.sh caboose.proxy.rlwy.net:5432 --timeout=60 -- python /app/migrate_db.py && flask run --host=0.0.0.0 --port=5000
