@@ -18,7 +18,7 @@ RUN pip install -r requirements.txt
 COPY services /app
 
 # Salin file migrate_db.py ke dalam container
-COPY migrate_db.py /app/migrate_db.py
+COPY services/migrate_db.py /app/migrate_db.py
 
 
 # Copy the db/schema.sql to the container
