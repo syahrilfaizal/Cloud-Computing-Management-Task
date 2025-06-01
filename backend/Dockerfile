@@ -31,4 +31,4 @@ RUN chmod +x /wait-for-it.sh
 # Set the FLASK_APP environment variable for Flask to recognize app.py
 ENV FLASK_APP=/app/app.py
 
-CMD /wait-for-it.sh caboose.proxy.rlwy.net 5432 -- python migrate_db.py && flask run --host=0.0.0.0 --port=5000
+CMD /wait-for-it.sh nozomi.proxy.rlwy.net 5432 -- python migrate_db.py && flask run --host=0.0.0.0 --port=5000
