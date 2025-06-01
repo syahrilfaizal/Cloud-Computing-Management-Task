@@ -27,6 +27,4 @@ RUN chmod +x /wait-for-it.sh
 # Set the FLASK_APP environment variable for Flask to recognize app.py
 ENV FLASK_APP=/app/app.py
 
-# Run the migration script and start the Flask app
-# Wait for PostgreSQL service to be ready
-CMD /wait-for-it.sh postgres.railway.internal:5432 -- python migrate_db.py && flask run --host=0.0.0.0 --port=5000
+CMD /wait-for-it.sh postgres.railway.internal 5432 -- python migrate_db.py && flask run --host=0.0.0.0 --port=5000
