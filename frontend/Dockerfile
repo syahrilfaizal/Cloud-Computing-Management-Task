@@ -5,13 +5,13 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files to install dependencies
-COPY src/package.json src/package-lock.json ./
+COPY my-react-app/package.json src/package-lock.json ./
 
 # Install the dependencies using npm ci (for clean and fast installation)
 RUN npm ci
 
 # Copy the rest of the app's source code into the container
-COPY src/ .
+COPY my-react-app/src/ .
 
 # Build the React app for production
 RUN npm run build
