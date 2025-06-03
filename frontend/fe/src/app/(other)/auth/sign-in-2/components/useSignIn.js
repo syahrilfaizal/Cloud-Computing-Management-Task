@@ -6,37 +6,36 @@ import * as yup from 'yup';
 import { useAuthContext } from '@/context/useAuthContext';
 import { useNotificationContext } from '@/context/useNotificationContext';
 import httpClient from '@/helpers/httpClient';
+
 const useSignIn = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {
-    saveSession
-  } = useAuthContext();
+  const { saveSession } = useAuthContext();
   const [searchParams] = useSearchParams();
-  const {
-    showNotification
-  } = useNotificationContext();
+  const { showNotification } = useNotificationContext();
+
   const loginFormSchema = yup.object({
-    email: yup.string().email('Please enter a valid email').required('Please enter your email'),
+    username: yup.string().required('Please enter your username'),
     password: yup.string().required('Please enter your password')
   });
-  const {
-    control,
-    handleSubmit
-  } = useForm({
+
+  const { control, handleSubmit } = useForm({
     resolver: yupResolver(loginFormSchema),
     defaultValues: {
-      email: 'test@techzaa.com',
+      username: 'testUser',
       password: 'password'
     }
   });
+
   const redirectUser = () => {
     const redirectLink = searchParams.get('redirectTo');
-    if (redirectLink) navigate(redirectLink);else navigate('/');
+    if (redirectLink) navigate(redirectLink);
+    else navigate('/');
   };
-  const login = handleSubmit(async values => {
+
+  const login = handleSubmit(async (values) => {
     try {
-      const res = await httpClient.post('/login', values);
+      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', values);
       if (res.data.token) {
         saveSession({
           ...(res.data ?? {}),
@@ -48,7 +47,6 @@ const useSignIn = () => {
           variant: 'success'
         });
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e) {
       if (e.response?.data?.error) {
         showNotification({
@@ -60,10 +58,12 @@ const useSignIn = () => {
       setLoading(false);
     }
   });
+
   return {
     loading,
     login,
     control
   };
 };
+
 export default useSignIn;
