@@ -46,13 +46,34 @@ const useSignIn = () => {
     });
     const res = await response.json();
     console.log('API response:', res);
-    // Continue with the rest of the code
+    
+    if (res.success) {  // Check if the login was successful
+      // Redirect the user
+      redirectUser();
+      
+      // Show success notification
+      showNotification({
+        message: 'Successfully logged in. Redirecting....',
+        variant: 'success'
+      });
+    } else {
+      // Show error notification if login fails
+      showNotification({
+        message: 'Login failed. Please check your credentials.',
+        variant: 'error'
+      });
+    }
   } catch (e) {
     console.error('Error during login:', e);
+    showNotification({
+      message: 'An error occurred. Please try again.',
+      variant: 'error'
+    });
   } finally {
     setLoading(false);
   }
 });
+
 
 
 
