@@ -6,7 +6,7 @@ from .utils import get_db_connection
 login_bp = Blueprint('login', __name__)
 
 # Endpoint to log in
-@login_bp.route('/login', methods=['POST'])
+@login_bp.route('/', methods=['POST'])
 def login_user():
     data = request.json
     username = data.get('username')
