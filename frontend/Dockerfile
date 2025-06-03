@@ -5,7 +5,7 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy the package.json and package-lock.json files to install dependencies
-COPY package.json src/package-lock.json ./
+COPY src/package.json src/package-lock.json ./
 
 # Install the dependencies using npm ci (for clean and fast installation)
 RUN npm ci
