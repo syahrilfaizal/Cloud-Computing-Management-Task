@@ -30,44 +30,30 @@ const useSignIn = () => {
   };
 
   const login = handleSubmit(async (values) => {
+  console.log('Login function called with values:', values); // Log the form values
   try {
-    setLoading(true); // Start loading
-    const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
-      username: values.username,
-      password: values.password,
+    setLoading(true);
+    const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        username: values.username,
+        password: values.password,
+      }),
     });
-
-    // Log response for debugging
-    console.log(res);
-
-    if (res.data.message === 'Login successful') {
-      saveSession({
-        ...(res.data ?? {}),
-        username: res.data.username,
-      });
-      redirectUser();
-      showNotification({
-        message: 'Successfully logged in. Redirecting....',
-        variant: 'success',
-      });
-    }
+    const res = await response.json();
+    console.log('API response:', res);
+    // Continue with the rest of the code
   } catch (e) {
-    console.error(e); // Debugging error
-    if (e.response?.data?.error) {
-      showNotification({
-        message: e.response?.data?.error || 'An error occurred during login',
-        variant: 'danger',
-      });
-    } else {
-      showNotification({
-        message: 'An unexpected error occurred',
-        variant: 'danger',
-      });
-    }
+    console.error('Error during login:', e);
   } finally {
-    setLoading(false); // Reset loading state after process is done
+    setLoading(false);
   }
 });
+
 
 
   return {
