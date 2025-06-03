@@ -26,7 +26,7 @@ const useSignIn = () => {
   const redirectUser = () => {
     const redirectLink = searchParams.get('redirectTo');
     if (redirectLink) navigate(redirectLink);
-    else navigate('/dashboard/analytics');
+    else navigate('/');
   };
 
   const login = handleSubmit(async (values) => {
