@@ -2,7 +2,7 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY fe/package.json fe/package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY fe .
 RUN npm run build
 
