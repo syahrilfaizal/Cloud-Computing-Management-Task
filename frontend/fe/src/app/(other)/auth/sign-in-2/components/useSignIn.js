@@ -32,7 +32,7 @@ const useSignIn = () => {
   const login = handleSubmit(async (values) => {
     try {
       setLoading(true); // Mulai loading
-      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
+      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login', {
         username: values.username,  // Sesuaikan dengan nama input
         password: values.password,  // Sesuaikan dengan nama input
       });
