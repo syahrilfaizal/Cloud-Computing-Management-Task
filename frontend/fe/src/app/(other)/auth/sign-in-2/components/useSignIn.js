@@ -30,37 +30,45 @@ const useSignIn = () => {
   };
 
   const login = handleSubmit(async (values) => {
-    try {
-      setLoading(true); // Mulai loading
-      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login', {
-        username: values.username,  // Sesuaikan dengan nama input
-        password: values.password,  // Sesuaikan dengan nama input
-      });
+  try {
+    setLoading(true); // Start loading
+    const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login', {
+      username: values.username,
+      password: values.password,
+    });
 
-      // Menggunakan `message` dari respons API untuk memverifikasi login berhasil
-      if (res.data.message === 'Login successful') {
-        saveSession({
-          ...(res.data ?? {}),
-          username: res.data.username,  // Menyimpan username jika tidak ada token
-        });
-        redirectUser();
-        showNotification({
-          message: 'Successfully logged in. Redirecting....',
-          variant: 'success',
-        });
-      }
-    } catch (e) {
-      console.error(e); // Debugging error
-      if (e.response?.data?.error) {
-        showNotification({
-          message: e.response?.data?.error,
-          variant: 'danger',
-        });
-      }
-    } finally {
-      setLoading(false); // Reset loading state setelah proses selesai
+    // Log response for debugging
+    console.log(res);
+
+    if (res.data.message === 'Login successful') {
+      saveSession({
+        ...(res.data ?? {}),
+        username: res.data.username,
+      });
+      redirectUser();
+      showNotification({
+        message: 'Successfully logged in. Redirecting....',
+        variant: 'success',
+      });
     }
-  });
+  } catch (e) {
+    console.error(e); // Debugging error
+    if (e.response?.data?.error) {
+      showNotification({
+        message: e.response?.data?.error || 'An error occurred during login',
+        variant: 'danger',
+      });
+    } else {
+      showNotification({
+        message: 'An unexpected error occurred',
+        variant: 'danger',
+      });
+    }
+  } finally {
+    setLoading(false); // Reset loading state after process is done
+  }
+});
+
 
   return {
     loading,
