@@ -17,6 +17,13 @@ RUN pip install -r requirements.txt
 # Copy the rest of the backend files (app.py, models.py, etc.)
 COPY services /app
 
+# Salin file migrate_db.py ke dalam container
+COPY services/migrate_db.py /app/migrate_db.py
+
+
+# Copy the db/schema.sql to the container
+COPY db/schema.sql /app/db/schema.sql
+
 # Add wait-for-it.sh to the image and make it executable
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod +x /wait-for-it.sh
@@ -24,5 +31,4 @@ RUN chmod +x /wait-for-it.sh
 # Set the FLASK_APP environment variable for Flask to recognize app.py
 ENV FLASK_APP=/app/app.py
 
-# Wait for PostgreSQL to be ready, then start the Flask app
-CMD sleep 10 && flask run --host=0.0.0.0 --port=5000
+CMD python migrate_db.py && flask run --host=0.0.0.0 --port=5000

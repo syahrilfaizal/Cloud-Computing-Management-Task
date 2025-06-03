@@ -1,6 +1,6 @@
-Flask-JWT-Extended==4.4.0
-Werkzeug==2.1.1 
 Flask==2.3.2
+Werkzeug>=2.3.3
+flask-jwt-extended==4.4.0  # atau jika perlu, update ke versi terbaru yang kompatibel dengan Flask dan Werkzeug
 flask-cors==4.0.0
 Flask-SQLAlchemy==3.0.5
 gunicorn==21.2.0

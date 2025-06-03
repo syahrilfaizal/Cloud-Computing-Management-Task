@@ -1,9 +1,9 @@
 # Stage 1: Build
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY my-react-app/package.json my-react-app/package-lock.json ./
-RUN npm ci
-COPY my-react-app .
+COPY fe/package.json fe/package-lock.json ./
+RUN npm ci --legacy-peer-deps
+COPY fe .
 RUN npm run build
 
 # Stage 2: Serve
