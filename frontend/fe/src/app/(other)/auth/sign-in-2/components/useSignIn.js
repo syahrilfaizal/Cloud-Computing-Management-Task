@@ -21,10 +21,6 @@ const useSignIn = () => {
 
   const { control, handleSubmit } = useForm({
     resolver: yupResolver(loginFormSchema),
-    defaultValues: {
-      username: 'testUser',
-      password: 'password'
-    }
   });
 
   const redirectUser = () => {
@@ -35,6 +31,7 @@ const useSignIn = () => {
 
   const login = handleSubmit(async (values) => {
     try {
+      setLoading(true); // Set loading to true when starting the login process
       const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', values);
       if (res.data.token) {
         saveSession({
@@ -48,6 +45,7 @@ const useSignIn = () => {
         });
       }
     } catch (e) {
+      console.log(e); // Debugging API error
       if (e.response?.data?.error) {
         showNotification({
           message: e.response?.data?.error,
@@ -55,7 +53,7 @@ const useSignIn = () => {
         });
       }
     } finally {
-      setLoading(false);
+      setLoading(false); // Reset loading state after the process is finished
     }
   });
 

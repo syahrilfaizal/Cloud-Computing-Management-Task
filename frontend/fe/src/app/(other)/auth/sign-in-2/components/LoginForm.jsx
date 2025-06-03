@@ -40,7 +40,7 @@ const LoginForm = () => {
       </div>
       <div className="mb-1 text-center d-grid">
         <Button variant="primary" type="submit" disabled={loading}>
-          Sign In
+          {loading ? 'Signing In...' : 'Sign In'}
         </Button>
       </div>
     </form>
