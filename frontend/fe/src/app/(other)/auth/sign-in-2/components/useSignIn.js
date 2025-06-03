@@ -48,14 +48,14 @@ const useSignIn = () => {
     console.log('API response:', res);
 
     if (res.message === "Login successful") {  // Check if the response message is 'Login successful'
-      // Redirect the user
-      redirectUser();
+      // Redirect the use
 
       // Show success notification
       showNotification({
         message: 'Successfully logged in. Redirecting....',
         variant: 'success'
       });
+         redirectUser();
     } else {
       // Show error notification if login fails
       showNotification({
