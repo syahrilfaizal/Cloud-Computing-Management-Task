@@ -1,10 +1,15 @@
+from flask import Flask
+from flask_cors import CORS
 import psycopg2
 import os
 from flask import Blueprint, request, jsonify
 from .utils import get_db_connection
 
+
+
 login_bp = Blueprint('login', __name__)
 
+CORS(login_bp)
 # Endpoint to log in
 @login_bp.route('/', methods=['POST'])
 def login_user():
