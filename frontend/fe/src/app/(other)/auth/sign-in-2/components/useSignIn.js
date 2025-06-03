@@ -31,29 +31,34 @@ const useSignIn = () => {
 
   const login = handleSubmit(async (values) => {
     try {
-      setLoading(true); // Set loading to true when starting the login process
-      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', values);
-      if (res.data.token) {
+      setLoading(true); // Mulai loading
+      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
+        username: values.username,  // Sesuaikan dengan nama input
+        password: values.password,  // Sesuaikan dengan nama input
+      });
+
+      // Menggunakan `message` dari respons API untuk memverifikasi login berhasil
+      if (res.data.message === 'Login successful') {
         saveSession({
           ...(res.data ?? {}),
-          token: res.data.token
+          username: res.data.username,  // Menyimpan username jika tidak ada token
         });
         redirectUser();
         showNotification({
           message: 'Successfully logged in. Redirecting....',
-          variant: 'success'
+          variant: 'success',
         });
       }
     } catch (e) {
-      console.log(e); // Debugging API error
+      console.error(e); // Debugging error
       if (e.response?.data?.error) {
         showNotification({
           message: e.response?.data?.error,
-          variant: 'danger'
+          variant: 'danger',
         });
       }
     } finally {
-      setLoading(false); // Reset loading state after the process is finished
+      setLoading(false); // Reset loading state setelah proses selesai
     }
   });
 
