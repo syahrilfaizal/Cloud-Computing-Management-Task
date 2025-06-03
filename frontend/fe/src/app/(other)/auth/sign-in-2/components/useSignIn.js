@@ -46,11 +46,11 @@ const useSignIn = () => {
     });
     const res = await response.json();
     console.log('API response:', res);
-    
-    if (res.success) {  // Check if the login was successful
+
+    if (res.message === "Login successful") {  // Check if the response message is 'Login successful'
       // Redirect the user
       redirectUser();
-      
+
       // Show success notification
       showNotification({
         message: 'Successfully logged in. Redirecting....',
@@ -73,6 +73,7 @@ const useSignIn = () => {
     setLoading(false);
   }
 });
+
 
 
 
