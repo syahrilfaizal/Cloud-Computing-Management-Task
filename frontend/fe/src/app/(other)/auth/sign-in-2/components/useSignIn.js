@@ -33,7 +33,7 @@ const useSignIn = () => {
   console.log('Login function called with values:', values); // Log the form values
   try {
     setLoading(true);
-    const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login', {
+    const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
