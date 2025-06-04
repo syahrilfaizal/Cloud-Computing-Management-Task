@@ -46,10 +46,15 @@ const useSignIn = () => {
       }),
     });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const res = await response.json();
     console.log('API response:', res);
 
     if (res.message === "Login successful") {
+      console.log('Redirecting user...'); // Log before redirecting
       redirectUser ();  
       showNotification({
         message: 'Successfully logged in. Redirecting....',
@@ -71,6 +76,7 @@ const useSignIn = () => {
     setLoading(false); // Set loading state to false after completion
   }
 });
+
 
 
 
