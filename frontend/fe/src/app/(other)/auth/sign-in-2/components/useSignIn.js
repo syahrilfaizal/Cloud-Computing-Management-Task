@@ -48,12 +48,12 @@ const useSignIn = () => {
     const res = await response.json();
     console.log('API response:', res);
 
-    if (res.message === "Login successful") {  
+    if (res.message === "Login successful") {
+      redirectUser();  
       showNotification({
         message: 'Successfully logged in. Redirecting....',
         variant: 'success'
       });
-      redirectUser();
     } else {
       showNotification({
         message: 'Login failed. Please check your credentials.',
