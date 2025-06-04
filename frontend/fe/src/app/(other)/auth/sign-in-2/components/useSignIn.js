@@ -24,10 +24,9 @@ const useSignIn = () => {
   });
 
   const redirectUser = () => {
-  const redirectLink = searchParams.get('redirectTo') || '/';  // Jika tidak ada, default ke '/'
-  console.log('Redirecting to:', redirectLink);  // Log untuk memastikan arah redirect
-  navigate(redirectLink);  // Redirect ke link yang benar
-};
+    const redirectLink = searchParams.get('redirectTo');
+    if (redirectLink) navigate(redirectLink);else navigate('/');
+  };
 
 
 
