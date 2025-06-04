@@ -31,45 +31,47 @@ const useSignIn = () => {
 
 
   const login = handleSubmit(async (values) => {
-  console.log('Login function called with values:', values); 
-  try {
-    setLoading(true);
-    const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        username: values.username,
-        password: values.password,
-      }),
-    });
-    const res = await response.json();
-    console.log('API response:', res);
+  console.log('Login function called with values:', values);
+  try {
+    setLoading(true);
+    const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        username: values.username,
+        password: values.password,
+      }),
+    });
 
-    if (res.message === "Login successful") {
-      redirectUser();  
-      showNotification({
-        message: 'Successfully logged in. Redirecting....',
-        variant: 'success'
-      });
-    } else {
-      showNotification({
-        message: 'Login failed. Please check your credentials.',
-        variant: 'error'
-      });
-    }
-  } catch (e) {
-    console.error('Error during login:', e);
-    showNotification({
-      message: 'An error occurred. Please try again.',
-      variant: 'error'
-    });
-  } finally {
-    setLoading(false); // Set loading state to false after completion
-  }
+    const res = await response.json();
+    console.log('API response:', res);
+
+    if (res.message === "Login successful") {
+      redirectUser ();  
+      showNotification({
+        message: 'Successfully logged in. Redirecting....',
+        variant: 'success'
+      });
+    } else {
+      showNotification({
+        message: 'Login failed. Please check your credentials.',
+        variant: 'error'
+      });
+    }
+  } catch (e) {
+    console.error('Error during login:', e);
+    showNotification({
+      message: 'An error occurred. Please try again.',
+      variant: 'error'
+    });
+  } finally {
+    setLoading(false); // Set loading state to false after completion
+  }
 });
+
 
 
 
