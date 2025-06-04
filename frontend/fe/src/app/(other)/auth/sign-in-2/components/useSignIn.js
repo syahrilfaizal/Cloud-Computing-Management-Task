@@ -24,13 +24,15 @@ const useSignIn = () => {
   });
 
   const redirectUser = () => {
-    const redirectLink = searchParams.get('redirectTo');
-    if (redirectLink) navigate(redirectLink);
-    else navigate('/');
-  };
+  const redirectLink = searchParams.get('redirectTo');
+  console.log('Redirect Link:', redirectLink); // Tambahkan log ini
+  if (redirectLink) navigate(redirectLink);
+  else navigate('/');
+};
+
 
   const login = handleSubmit(async (values) => {
-  console.log('Login function called with values:', values); // Log the form values
+  console.log('Login function called with values:', values); 
   try {
     setLoading(true);
     const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
@@ -47,17 +49,13 @@ const useSignIn = () => {
     const res = await response.json();
     console.log('API response:', res);
 
-    if (res.message === "Login successful") {  // Check if the response message is 'Login successful'
-      // Redirect the use
-
-      // Show success notification
+    if (res.message === "Login successful") {  
       showNotification({
         message: 'Successfully logged in. Redirecting....',
         variant: 'success'
       });
-         redirectUser();
+      redirectUser();
     } else {
-      // Show error notification if login fails
       showNotification({
         message: 'Login failed. Please check your credentials.',
         variant: 'error'
@@ -70,9 +68,10 @@ const useSignIn = () => {
       variant: 'error'
     });
   } finally {
-    setLoading(false);
+    setLoading(false); // Set loading state to false after completion
   }
 });
+
 
 
 
