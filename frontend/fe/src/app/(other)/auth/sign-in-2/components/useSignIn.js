@@ -16,7 +16,7 @@ const useSignIn = () => {
 
   const loginFormSchema = yup.object({
     username: yup.string().required('Please enter your username'),
-    password: yup.string().required('Please enter your password')
+    password: yup.string().required('Please enter your password'),
   });
 
   const { control, handleSubmit } = useForm({
@@ -25,40 +25,60 @@ const useSignIn = () => {
 
   const redirectUser = () => {
     const redirectLink = searchParams.get('redirectTo');
-    if (redirectLink) navigate(redirectLink);
-    else navigate('/');
+    if (redirectLink) navigate(redirectLink); else navigate('/');
   };
 
   const login = handleSubmit(async (values) => {
+    console.log('Login function called with values:', values);
     try {
-      setLoading(true); // Mulai loading
-      const res = await httpClient.post('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
-        username: values.username,  // Sesuaikan dengan nama input
-        password: values.password,  // Sesuaikan dengan nama input
+      setLoading(true);
+      const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          username: values.username,
+          password: values.password,
+        }),
       });
 
-      // Menggunakan `message` dari respons API untuk memverifikasi login berhasil
-      if (res.data.message === 'Login successful') {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const res = await response.json();
+      console.log('API response:', res);
+
+      if (res.message === "Login successful") {
+        console.log('Redirecting user...'); // Log before redirecting
+
+        // Save session data
         saveSession({
-          ...(res.data ?? {}),
-          username: res.data.username,  // Menyimpan username jika tidak ada token
+          username: values.username,
+          token: res.token, // Assuming the API returns a token
         });
+
         redirectUser();
         showNotification({
           message: 'Successfully logged in. Redirecting....',
-          variant: 'success',
+          variant: 'success'
+        });
+      } else {
+        showNotification({
+          message: 'Login failed. Please check your credentials.',
+          variant: 'error'
         });
       }
     } catch (e) {
-      console.error(e); // Debugging error
-      if (e.response?.data?.error) {
-        showNotification({
-          message: e.response?.data?.error,
-          variant: 'danger',
-        });
-      }
+      console.error('Error during login:', e);
+      showNotification({
+        message: 'An error occurred. Please try again.',
+        variant: 'error'
+      });
     } finally {
-      setLoading(false); // Reset loading state setelah proses selesai
+      setLoading(false); // Set loading state to false after completion
     }
   });
 
