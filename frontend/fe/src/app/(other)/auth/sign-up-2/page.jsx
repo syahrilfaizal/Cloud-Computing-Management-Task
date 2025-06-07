@@ -2,7 +2,6 @@ import { Card, CardBody, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import LogoBox from '@/components/LogoBox';
 import PageMetaData from '@/components/PageTitle';
-import ThirdPartyAuth from '@/components/ThirdPartyAuth';
 import SignUpForm from './components/SignUpForm';
 const SignUp2 = () => {
   return <>
@@ -23,13 +22,12 @@ const SignUp2 = () => {
             <p className="text-muted text-center mt-1 mb-4">New to our platform? Sign up now! It only takes a minute.</p>
             <div className="px-4">
               <SignUpForm />
-              <ThirdPartyAuth />
             </div>
           </CardBody>
         </Card>
         <p className="mb-0 text-center">
           I already have an account
-          <Link to="/auth/sign-in-2" className="fw-bold ms-1">
+          <Link to="/auth/sign-in" className="fw-bold ms-1">
             Sign In
           </Link>
         </p>
