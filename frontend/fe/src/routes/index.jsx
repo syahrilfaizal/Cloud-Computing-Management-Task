@@ -20,6 +20,8 @@ const Email = lazy(() => import('@/app/(admin)/apps/email/page'));
 const Schedule = lazy(() => import('@/app/(admin)/calendar/schedule/page'));
 const Integration = lazy(() => import('@/app/(admin)/calendar/integration/page'));
 const Todo = lazy(() => import('@/app/(admin)/apps/todo/page'));
+const AddTask = lazy(() => import('@/app/(admin)/apps/todo/components/AddTask'));
+const EditTask = lazy(() => import('@/app/(admin)/apps/todo/components/EditTask'));
 // const Social = lazy(() => import('@/app/(admin)/apps/social/page'))
 // const Contacts = lazy(() => import('@/app/(admin)/apps/contacts/page'))
 const Invoices = lazy(() => import('@/app/(admin)/invoices/page'));
@@ -199,6 +201,16 @@ const appsRoutes = [
   name: 'Todo',
   path: '/apps/todo',
   element: <Todo />
+},
+{
+  name: 'AddTask',
+  path: '/apps/addtask',
+  element: <AddTask />
+},
+{
+  name: 'EditTask',
+  path: '/apps/edittask',
+  element: <EditTask />
 },
 //   {
 //     name: 'Social',
