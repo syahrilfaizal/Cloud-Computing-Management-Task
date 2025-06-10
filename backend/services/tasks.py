@@ -10,34 +10,35 @@ task_bp = Blueprint('tasks', __name__)
 def get_tasks():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT id, name, description, due_date, priority, status, assignee_id FROM tasks;")
+    cur.execute("SELECT id, task_name, description, created_at, due_date, priority, status, assignee_name FROM tasks;")
     rows = cur.fetchall()
     cur.close()
     conn.close()
 
-    tasks = [{"id": row[0], "name": row[1], "description": row[2], "due_date": row[3], "priority": row[4], "status": row[5], "assignee_id": row[6]} for row in rows]
+    tasks = [{"id": row[0], "task_name": row[1], "description": row[2], "created_at": row[3], "due_date": row[4], "priority": row[5], "status": row[6], "assignee_name": row[7]} for row in rows]
     return jsonify(tasks)
 
 # Endpoint to create a new task
 @task_bp.route('/', methods=['POST'])
 def create_task():
     data = request.json
-    name = data['name']
+    task_name = data['task_name']
     description = data['description']
+    created_at = data['created_at']
     due_date = data['due_date']
     priority = data['priority']
-    assignee_id = data['assignee_id']
+    assignee_name = data['assignee_name']
 
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO tasks (name, description, due_date, priority, status, assignee_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;",
-                (name, description, due_date, priority, 'Pending', assignee_id))
+    cur.execute("INSERT INTO tasks (task_name, description, created_at, due_date, priority, status, assignee_name) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id;",
+                (task_name, description, created_at, due_date, priority, 'Tertunda', assignee_name))
     new_id = cur.fetchone()[0]
     conn.commit()
     cur.close()
     conn.close()
 
-    return jsonify({"id": new_id, "name": name, "description": description, "due_date": due_date, "priority": priority, "status": 'Pending', "assignee_id": assignee_id}), 201
+    return jsonify({"id": new_id, "task_name": task_name, "description": description, "created_at": created_at, "due_date": due_date, "priority": priority, "status": 'Tertunda', "assignee_name": assignee_name}), 201
 
 # Endpoint to update task status
 @task_bp.route('/<int:task_id>', methods=['PUT'])
