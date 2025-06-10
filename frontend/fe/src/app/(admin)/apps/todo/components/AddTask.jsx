@@ -4,9 +4,11 @@ import ComponentContainerCard from '@/components/ComponentContainerCard';
 import TextFormInput from '@/components/form/TextFormInput';
 import TextAreaFormInput from '@/components/form/TextAreaFormInput';
 import PageMetaData from '@/components/PageTitle';
+import { useSignIn } from '@/hooks/useSignIn'; // Import useSignIn hook
 
 const AddTask = () => {
   const { control, handleSubmit } = useForm();
+  const { redirectUser } = useSignIn();  // Extract redirectUser from useSignIn
 
   // Function to handle the form submission
   const onSubmit = async (data) => {
@@ -37,7 +39,8 @@ const AddTask = () => {
       const result = await response.json();
       console.log('Task created:', result);
 
-      // Optionally, handle response, like clearing the form or showing a success message
+      // Redirect user after successful task creation
+      redirectUser(); // Redirect after task creation
       alert('Task created successfully!');
     } catch (error) {
       console.error('Error creating task:', error);
