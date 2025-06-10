@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Col, Row, Button } from 'react-bootstrap';
 import ComponentContainerCard from '@/components/ComponentContainerCard';
@@ -6,22 +8,87 @@ import TextAreaFormInput from '@/components/form/TextAreaFormInput';
 import PageMetaData from '@/components/PageTitle';
 
 const EditTask = () => {
-  // Simulasi data awal tugas yang diedit
-  const defaultValues = {
-    taskName: 'Tugas 1',
-    createdDate: '2025-06-01',
-    dueDate: '2025-06-10',
-    assignee: 'Budi',
-    status: 'Dalam Proses',
-    priority: 'Tinggi',
-    description: 'Ini deskripsi dari tugas 1.',
+  const { id } = useParams(); // Ambil ID task dari URL
+  const [task, setTask] = useState(null);
+  const [loading, setLoading] = useState(true);  // Menambahkan loading state
+  const [error, setError] = useState(null); // Menambahkan state error
+  const navigate = useNavigate();
+  const { control, handleSubmit, setValue } = useForm();
+
+  useEffect(() => {
+    // Ambil data task berdasarkan ID
+    const fetchTask = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://be-cloud-computing-management-task-production.up.railway.app/api/tasks/${id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTask(data);
+
+        // Set form values setelah data task diambil
+        setValue("taskName", data.task_name);
+        setValue("createdDate", data.created_at);
+        setValue("dueDate", data.due_date);
+        setValue("assignee", data.assignee_name);
+        setValue("status", data.status);
+        setValue("priority", data.priority);
+        setValue("description", data.description);
+      } catch (error) {
+        setError("Error fetching task. Please try again.");
+        console.error('Error fetching task:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTask();
+  }, [id, setValue]);
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await fetch(`https://be-cloud-computing-management-task-production.up.railway.app/api/tasks/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          task_name: data.taskName,
+          created_at: data.createdDate,
+          due_date: data.dueDate,
+          assignee_name: data.assignee,
+          status: data.status,
+          priority: data.priority,
+          description: data.description,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Redirect to the task list or show a success message
+      navigate("/apps/todolist"); // Redirect to the task list page after successful update
+    } catch (error) {
+      console.error('Error updating task:', error);
+      alert('An error occurred while updating the task.');
+    }
   };
 
-  const { control, handleSubmit } = useForm({ defaultValues });
+  if (loading) {
+    return <div>Loading...</div>;  // Menunggu data task diambil
+  }
 
-  const onSubmit = (data) => {
-    console.log('Updated task data:', data);
-  };
+  if (error) {
+    return <div>{error}</div>; // Menampilkan error jika terjadi masalah
+  }
+
+  if (!task) {
+    return <div>Task not found</div>;  // Jika task tidak ditemukan
+  }
 
   return (
     <>

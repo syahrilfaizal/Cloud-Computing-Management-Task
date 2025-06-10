@@ -212,6 +212,11 @@ const appsRoutes = [
   path: '/apps/edittask',
   element: <EditTask />
 },
+{
+  name: 'EditTask',
+  path: '/apps/edittask/:id', // Menggunakan :id sebagai parameter URL
+  element: <EditTask />
+},
 //   {
 //     name: 'Social',
 //     path: '/apps/social',

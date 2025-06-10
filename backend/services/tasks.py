@@ -26,6 +26,39 @@ def get_tasks():
         cur.close()
         conn.close()
 
+@task_bp.route('/<int:task_id>', methods=['GET'])
+def get_task_by_id(task_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        # Query untuk mengambil task berdasarkan ID
+        cur.execute("SELECT id, task_name, description, created_at, due_date, priority, status, assignee_name FROM tasks WHERE id = %s;", (task_id,))
+        row = cur.fetchone()  # Mengambil satu baris data berdasarkan ID
+        
+        if row is None:
+            return jsonify({"error": "Task not found"}), 404  # Jika task tidak ditemukan
+        
+        # Jika task ditemukan, buat dictionary untuk response
+        task = {
+            "id": row[0],
+            "task_name": row[1],
+            "description": row[2],
+            "created_at": row[3],
+            "due_date": row[4],
+            "priority": row[5],
+            "status": row[6],
+            "assignee_name": row[7]
+        }
+        return jsonify(task)  # Mengembalikan data task sebagai JSON
+        
+    except Exception as e:
+        print(f"Error fetching task: {e}")
+        return jsonify({"error": "Error fetching task"}), 500  # Menangani error pada server
+    
+    finally:
+        cur.close()
+        conn.close()  # Menutup koneksi dan cursor setelah query selesai
+
 
 @task_bp.route('/', methods=['POST'])
 def create_task():

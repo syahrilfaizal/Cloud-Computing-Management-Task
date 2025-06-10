@@ -115,7 +115,7 @@ const TODO = () => {
                           {task.priority}
                         </td>
                         <td>
-                          <Link to="/apps/edittask">
+                          <Link to={`/apps/edittask/${task.id}`}>
                             <Button variant="soft-secondary" size="sm" className="me-2">
                               <IconifyIcon icon="bx:edit" className="fs-16" />
                             </Button>
