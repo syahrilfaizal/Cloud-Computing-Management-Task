@@ -29,7 +29,7 @@ const SignIn2 = () => {
         </Card>
         <p className="mb-0 text-center">
           New here?
-          <Link to="/auth/sign-up-2" className="fw-bold ms-1">
+          <Link to="/auth/sign-up" className="fw-bold ms-1">
             Sign Up
           </Link>
         </p>

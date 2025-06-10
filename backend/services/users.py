@@ -20,4 +20,4 @@ def create_user():
     cur.close()
     conn.close()
 
-    return jsonify({"id": new_id, "username": username, "password": password}), 201
+    return jsonify({"message": "User created successfully", "id": new_id, "username": username, "password": password}), 201
