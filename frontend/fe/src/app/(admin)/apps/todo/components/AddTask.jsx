@@ -4,7 +4,7 @@ import ComponentContainerCard from '@/components/ComponentContainerCard';
 import TextFormInput from '@/components/form/TextFormInput';
 import TextAreaFormInput from '@/components/form/TextAreaFormInput';
 import PageMetaData from '@/components/PageTitle';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useNavigate
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const AddTask = () => {
   const { control, handleSubmit } = useForm();
@@ -40,12 +40,14 @@ const AddTask = () => {
       const result = await response.json();
       console.log('Task created:', result);
 
-      // Handle redirect after task creation
+      // Log to check if redirect logic is working
       const redirectLink = searchParams.get('redirectTo');
+      console.log('Redirecting to:', redirectLink);  // Log the redirect URL
+
       if (redirectLink) {
-        navigate(redirectLink); // Redirect to the URL passed in the query parameter
+        navigate(redirectLink);  // Redirect to the URL passed in the query parameter
       } else {
-        navigate('/'); // Default redirect to home page
+        navigate('/apps/todo');  // Default redirect to home page
       }
       
       alert('Task created successfully!');

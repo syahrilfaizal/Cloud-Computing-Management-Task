@@ -10,13 +10,17 @@ task_bp = Blueprint('tasks', __name__)
 def get_tasks():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT id, task_name, description, created_at, due_date, priority, status, assignee_name FROM tasks;")
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
-
-    tasks = [{"id": row[0], "task_name": row[1], "description": row[2], "created_at": row[3], "due_date": row[4], "priority": row[5], "status": row[6], "assignee_name": row[7]} for row in rows]
-    return jsonify(tasks)
+    try:
+        cur.execute("SELECT id, task_name, description, created_at, due_date, priority, status, assignee_name FROM tasks;")
+        rows = cur.fetchall()
+        tasks = [{"id": row[0], "task_name": row[1], "description": row[2], "created_at": row[3], "due_date": row[4], "priority": row[5], "status": row[6], "assignee_name": row[7]} for row in rows]
+        return jsonify(tasks)
+    except Exception as e:
+        print(f"Error fetching tasks: {e}")
+        return jsonify({"error": "Error fetching tasks"}), 500
+    finally:
+        cur.close()
+        conn.close()
 
 @task_bp.route('/', methods=['POST'])
 def create_task():
