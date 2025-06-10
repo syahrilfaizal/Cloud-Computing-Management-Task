@@ -4,11 +4,12 @@ import ComponentContainerCard from '@/components/ComponentContainerCard';
 import TextFormInput from '@/components/form/TextFormInput';
 import TextAreaFormInput from '@/components/form/TextAreaFormInput';
 import PageMetaData from '@/components/PageTitle';
-import { useSignIn } from '@/hooks/useSignIn'; // Import useSignIn hook
+import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useNavigate
 
 const AddTask = () => {
   const { control, handleSubmit } = useForm();
-  const { redirectUser } = useSignIn();  // Extract redirectUser from useSignIn
+  const navigate = useNavigate();  // Use useNavigate for redirect
+  const [searchParams] = useSearchParams(); // To handle potential redirect query
 
   // Function to handle the form submission
   const onSubmit = async (data) => {
@@ -39,8 +40,14 @@ const AddTask = () => {
       const result = await response.json();
       console.log('Task created:', result);
 
-      // Redirect user after successful task creation
-      redirectUser(); // Redirect after task creation
+      // Handle redirect after task creation
+      const redirectLink = searchParams.get('redirectTo');
+      if (redirectLink) {
+        navigate(redirectLink); // Redirect to the URL passed in the query parameter
+      } else {
+        navigate('/'); // Default redirect to home page
+      }
+      
       alert('Task created successfully!');
     } catch (error) {
       console.error('Error creating task:', error);
