@@ -8,8 +8,41 @@ import PageMetaData from '@/components/PageTitle';
 const AddTask = () => {
   const { control, handleSubmit } = useForm();
 
-  const onSubmit = (data) => {
+  // Function to handle the form submission
+  const onSubmit = async (data) => {
     console.log('Form data:', data);
+
+    try {
+      const response = await fetch('https://be-cloud-computing-management-task-production.up.railway.app/api/tasks/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          task_name: data.taskName,
+          created_at: data.createdDate,
+          due_date: data.dueDate,
+          assignee_name: data.assignee,
+          status: data.status,
+          priority: data.priority,
+          description: data.description,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Task created:', result);
+
+      // Optionally, handle response, like clearing the form or showing a success message
+      alert('Task created successfully!');
+    } catch (error) {
+      console.error('Error creating task:', error);
+      alert('An error occurred while creating the task.');
+    }
   };
 
   return (
