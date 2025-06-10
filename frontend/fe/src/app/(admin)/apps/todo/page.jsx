@@ -96,7 +96,7 @@ const TODO = () => {
                         <td>
                           <span
                             className={`badge badge-soft-${
-                              task.status === 'Pending' ? 'primary' : task.status === 'In-Progress' ? 'warning' : 'success'
+                              task.status === 'Tertunda' ? 'primary' : task.status === 'Dalam Proses' ? 'warning' : 'success'
                             }`}
                           >
                             {task.status}
