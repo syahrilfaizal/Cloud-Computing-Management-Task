@@ -28,10 +28,13 @@ const EditTask = () => {
         const data = await response.json();
         setTask(data);
 
-        // Set form values setelah data task diambil
+        // Set form values setelah data task diambil dan pastikan format tanggal sesuai
+        const formattedCreatedDate = data.created_at.split("T")[0]; // Menyaring tanggal dalam format YYYY-MM-DD
+        const formattedDueDate = data.due_date.split("T")[0]; // Menyaring tanggal dalam format YYYY-MM-DD
+
         setValue("taskName", data.task_name);
-        setValue("createdDate", data.created_at);
-        setValue("dueDate", data.due_date);
+        setValue("createdDate", formattedCreatedDate);
+        setValue("dueDate", formattedDueDate);
         setValue("assignee", data.assignee_name);
         setValue("status", data.status);
         setValue("priority", data.priority);
