@@ -2,7 +2,6 @@ import { Card, CardBody, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import LogoBox from '@/components/LogoBox';
 import PageMetaData from '@/components/PageTitle';
-import ThirdPartyAuth from '@/components/ThirdPartyAuth';
 import LoginForm from './components/LoginForm';
 const SignIn2 = () => {
   return <>
@@ -23,7 +22,6 @@ const SignIn2 = () => {
             <p className="text-muted text-center mt-1 mb-4">Enter your email address and password to access admin panel.</p>
             <div className="px-4">
               <LoginForm />
-              <ThirdPartyAuth />
             </div>
           </CardBody>
         </Card>

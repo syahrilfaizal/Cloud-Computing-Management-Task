@@ -1,3 +1,20 @@
+import axios from 'axios';
+
+export const getTasks = async () => {
+  try {
+    const res = await axios.get('https://fakestoreapi.com/products');
+    return res.data;
+  } catch (err) {
+    console.error('GAGAL GET:', err);
+    return [];
+  }
+};
+
+export const createTask = async (data) => {
+  const response = await axios.post('http://fakestoreapi.com/products', data);
+  return response.data;
+};
+
 export const todoData = [{
   id: '501',
   task: 'Review system logs for any reported errors',

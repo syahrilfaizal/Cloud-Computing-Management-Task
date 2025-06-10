@@ -3,32 +3,42 @@ import { Link } from 'react-router-dom';
 import IconifyIcon from '@/components/wrappers/IconifyIcon';
 import SimplebarReactClient from '@/components/wrappers/SimplebarReactClient';
 import { getJoinedGroups } from '@/helpers/data';
+import { getTasks } from '../../../../../assets/data/task';
 const Group = () => {
-  const [groups, setGroups] = useState();
+  // const [groups, setGroups] = useState();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const fetchedGroups = await getJoinedGroups();
+  //     setGroups(fetchedGroups);
+  //   };
+  //   fetchData();
+  // }, []);
+  const [tasks, setTasks] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedGroups = await getJoinedGroups();
-      setGroups(fetchedGroups);
+    const fetchTasks = async () => {
+      const data = await getTasks();
+      setTasks(data); // simpan ke state
     };
-    fetchData();
+    fetchTasks();
   }, []);
+
   return <SimplebarReactClient className="px-3 mb-3 chat-setting-height">
-      <div className="d-flex align-items-center position-relative mb-3">
-        <Link to="" className="me-2 stretched-link rounded text-bg-primary avatar d-flex align-items-center justify-content-center fs-18">
-          <IconifyIcon icon="bxs:user" />
-        </Link>
-        <div className="flex-grow-1">
-          <h5 className="my-0 fs-14">New Group</h5>
-        </div>
+    <div className="d-flex align-items-center position-relative mb-3">
+      <Link to="" className="me-2 stretched-link rounded text-bg-primary avatar d-flex align-items-center justify-content-center fs-18">
+        <IconifyIcon icon="bxs:user" />
+      </Link>
+      <div className="flex-grow-1">
+        <h5 className="my-0 fs-14">New Group</h5>
       </div>
-      {groups?.map((group, idx) => <div className="chat-item d-flex mb-3 align-items-center position-relative" key={idx}>
-          <Link to="" className="me-2 stretched-link rounded bg-soft-primary text-primary avatar d-flex align-items-center justify-content-center fs-18">
-            G
-          </Link>
-          <div className="flex-grow-1 ps-1 overflow-hidden">
-            <h5 className="fs-14 m-0">#{group.name}</h5>
-          </div>
-        </div>)}
-    </SimplebarReactClient>;
+    </div>
+    {tasks?.map((task, idx) => <div className="chat-item d-flex mb-3 align-items-center position-relative" key={idx}>
+      <Link to="" className="me-2 stretched-link rounded bg-soft-primary text-primary avatar d-flex align-items-center justify-content-center fs-18">
+        G
+      </Link>
+      <div className="flex-grow-1 ps-1 overflow-hidden">
+        <h5 className="fs-14 m-0">#{task.title}</h5>
+      </div>
+    </div>)}
+  </SimplebarReactClient>;
 };
 export default Group;
