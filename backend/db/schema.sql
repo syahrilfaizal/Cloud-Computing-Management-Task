@@ -13,5 +13,5 @@ CREATE TABLE tasks (
     due_date DATE,  -- for 'Tanggal Jatuh Tempo'
     assignee_name VARCHAR(255),  -- for 'Ditugaskan Kepada'
     status VARCHAR(50) DEFAULT 'Tertunda',  -- for 'Status'
-    priority VARCHAR(50),  -- for 'Prioritas'
+    priority VARCHAR(51),  -- for 'Prioritas'
 );
