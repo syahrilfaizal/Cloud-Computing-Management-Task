@@ -13,6 +13,10 @@ def get_tasks():
     try:
         cur.execute("SELECT id, task_name, description, created_at, due_date, priority, status, assignee_name FROM tasks;")
         rows = cur.fetchall()
+        if not rows:
+            print("No tasks found.")
+            return jsonify({"error": "No tasks found"}), 404
+        
         tasks = [{"id": row[0], "task_name": row[1], "description": row[2], "created_at": row[3], "due_date": row[4], "priority": row[5], "status": row[6], "assignee_name": row[7]} for row in rows]
         return jsonify(tasks)
     except Exception as e:
@@ -21,6 +25,7 @@ def get_tasks():
     finally:
         cur.close()
         conn.close()
+
 
 @task_bp.route('/', methods=['POST'])
 def create_task():
