@@ -104,9 +104,9 @@ const TODO = () => {
                         </td>
                         <td
                           className={`text-${
-                            task.priority === 'High'
+                            task.priority === 'Tinggi'
                               ? 'danger'
-                              : task.priority === 'Medium'
+                              : task.priority === 'Sedang'
                               ? 'warning'
                               : 'success'
                           }`}

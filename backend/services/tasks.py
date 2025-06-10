@@ -58,16 +58,43 @@ def create_task():
 
 # Endpoint to update task status
 @task_bp.route('/<int:task_id>', methods=['PUT'])
-def update_task_status(task_id):
+def update_task(task_id):
     data = request.json
-    status = data['status']
 
+    # Mengambil data dari request untuk task yang akan diperbarui
+    task_name = data.get('task_name')
+    description = data.get('description')
+    created_at = data.get('created_at')
+    due_date = data.get('due_date')
+    priority = data.get('priority')
+    status = data.get('status')
+    assignee_name = data.get('assignee_name')
+
+    # Membuat koneksi ke database
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("UPDATE tasks SET status = %s WHERE id = %s RETURNING id;", (status, task_id))
-    updated_id = cur.fetchone()[0]
-    conn.commit()
-    cur.close()
-    conn.close()
 
-    return jsonify({"msg": "Task status updated", "id": updated_id}), 200
+    try:
+        # Update task dengan data yang baru
+        query = """
+        UPDATE tasks
+        SET task_name = %s, description = %s, created_at = %s, due_date = %s,
+            priority = %s, status = %s, assignee_name = %s
+        WHERE id = %s
+        RETURNING id;
+        """
+        cur.execute(query, (task_name, description, created_at, due_date, priority, status, assignee_name, task_id))
+
+        # Mendapatkan ID task yang diperbarui
+        updated_id = cur.fetchone()[0]
+        conn.commit()
+
+        return jsonify({"msg": "Task updated successfully", "id": updated_id}), 200
+    except Exception as e:
+        # Jika terjadi kesalahan, rollback dan kembalikan error
+        conn.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        # Menutup cursor dan koneksi
+        cur.close()
+        conn.close()
