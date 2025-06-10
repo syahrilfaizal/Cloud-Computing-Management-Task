@@ -7,6 +7,15 @@ import TextFormInput from '@/components/form/TextFormInput';
 import TextAreaFormInput from '@/components/form/TextAreaFormInput';
 import PageMetaData from '@/components/PageTitle';
 
+// Fungsi untuk mengonversi tanggal ke format YYYY-MM-DD
+const formatDate = (dateString) => {
+  const date = new Date(dateString); // Membuat objek Date dari string
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Menambahkan leading zero jika bulan kurang dari 10
+  const day = date.getDate().toString().padStart(2, '0'); // Menambahkan leading zero jika hari kurang dari 10
+  return `${year}-${month}-${day}`; // Mengembalikan format YYYY-MM-DD
+};
+
 const EditTask = () => {
   const { id } = useParams(); // Ambil ID task dari URL
   const [task, setTask] = useState(null);
@@ -29,12 +38,12 @@ const EditTask = () => {
         setTask(data);
 
         // Set form values setelah data task diambil dan pastikan format tanggal sesuai
-        const formattedCreatedDate = data.created_at.split("T")[0]; // Menyaring tanggal dalam format YYYY-MM-DD
-        const formattedDueDate = data.due_date.split("T")[0]; // Menyaring tanggal dalam format YYYY-MM-DD
+        const formattedCreatedDate = formatDate(data.created_at); // Mengubah format tanggal
+        const formattedDueDate = formatDate(data.due_date); // Mengubah format tanggal
 
         setValue("taskName", data.task_name);
-        setValue("createdDate", formattedCreatedDate);
-        setValue("dueDate", formattedDueDate);
+        setValue("createdDate", formattedCreatedDate); // Menggunakan format tanggal yang sudah diubah
+        setValue("dueDate", formattedDueDate); // Menggunakan format tanggal yang sudah diubah
         setValue("assignee", data.assignee_name);
         setValue("status", data.status);
         setValue("priority", data.priority);
@@ -74,7 +83,7 @@ const EditTask = () => {
       }
 
       // Redirect to the task list or show a success message
-      navigate("/apps/todolist"); // Redirect to the task list page after successful update
+      navigate("/apps/todo"); // Redirect to the task list page after successful update
     } catch (error) {
       console.error('Error updating task:', error);
       alert('An error occurred while updating the task.');

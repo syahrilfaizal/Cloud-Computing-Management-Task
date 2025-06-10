@@ -26,6 +26,31 @@ const TODO = () => {
     fetchTasks();  // Call the function to fetch tasks when the component mounts
   }, []);
 
+  // Handle Delete Task
+  const handleDelete = async (taskId) => {
+    try {
+      const response = await fetch(`https://be-cloud-computing-management-task-production.up.railway.app/api/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Remove the deleted task from the state
+      setAllTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+
+      alert('Task deleted successfully');
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      alert('An error occurred while deleting the task.');
+    }
+  };
+
   return (
     <>
       <PageMetaData title="Todo" />
@@ -120,7 +145,12 @@ const TODO = () => {
                               <IconifyIcon icon="bx:edit" className="fs-16" />
                             </Button>
                           </Link>
-                          <Button variant="soft-danger" size="sm" type="button">
+                          <Button
+                            variant="soft-danger"
+                            size="sm"
+                            type="button"
+                            onClick={() => handleDelete(task.id)}  // Calling delete handler
+                          >
                             <IconifyIcon icon="bx:trash" className="fs-16" />
                           </Button>
                         </td>
@@ -174,4 +204,5 @@ const TODO = () => {
     </>
   );
 };
+
 export default TODO;

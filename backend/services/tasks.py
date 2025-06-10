@@ -131,3 +131,26 @@ def update_task(task_id):
         # Menutup cursor dan koneksi
         cur.close()
         conn.close()
+
+
+@task_bp.route('/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    try:
+        # Query untuk menghapus task berdasarkan ID
+        cur.execute("DELETE FROM tasks WHERE id = %s RETURNING id;", (task_id,))
+        deleted_id = cur.fetchone()
+
+        if deleted_id is None:
+            return jsonify({"error": "Task not found"}), 404  # Jika task tidak ditemukan
+        
+        conn.commit()  # Commit perubahan
+        return jsonify({"msg": f"Task with id {task_id} deleted successfully."}), 200
+        
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return jsonify({"error": str(e)}), 500  # Menangani error pada server
+    finally:
+        cur.close()
+        conn.close()  # Menutup koneksi dan cursor setelah query selesai
