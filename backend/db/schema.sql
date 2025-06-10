@@ -14,5 +14,5 @@ CREATE TABLE tasks (
     assignee_name VARCHAR(255),  -- for 'Ditugaskan Kepada'
     status VARCHAR(50) DEFAULT 'Tertunda',  -- for 'Status'
     priority VARCHAR(50),  -- for 'Prioritas'
-    assignee_name VARCHAR(50)  -- Assuming 'users' table exists with 'id' field
+    assignee_name VARCHAR(60)  -- Assuming 'users' table exists with 'id' field
 );
